@@ -1,0 +1,13 @@
+# Legacy workspace and local agent metadata
+user_TMP/
+.agents/
+agent/
+agent_log/
+agent_rules/
+API_SSH_PSW/
+release/
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.vscode/

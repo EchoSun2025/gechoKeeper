@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Geko Keeper · UI Preview</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main class="device-shell">
+      <div class="ratio-note">Galaxy Z Fold 3 · Landscape · 24.5 : 9</div>
+      <section class="app" id="app">
+        <div class="page-indicator" aria-label="页面导航">
+          <button class="dot active" data-page="home" aria-label="首页"></button>
+          <button class="dot" data-page="create" aria-label="创建专注任务"></button>
+          <button class="dot" data-page="checklist" aria-label="今日清单"></button>
+          <button class="dot" data-page="report" aria-label="报告"></button>
+        </div>
+
+        <section class="screen home active" data-screen="home">
+          <video class="home-video" autoplay muted loop playsinline aria-label="小壁虎在森林中晒太阳的背景视频">
+            <source src="../assets/video/gekoSunshine.mp4" type="video/mp4" />
+          </video>
+          <div class="sun-overlay"></div>
+          <header class="home-header">
+            <div><span class="eyebrow">GOOD AFTERNOON</span><h1>Wellington <span id="clock">16:20</span> <span>🌤</span></h1></div>
+            <button class="avatar" aria-label="个人设置">G</button>
+          </header>
+          <div class="home-message"><span>今天也慢慢来，做好一件事就很棒。</span><b>— Geko</b></div>
+          <div class="home-actions">
+            <div class="sound-wrap">
+              <div class="volume"><span>鸟鸣白噪音</span><input id="volume" type="range" min="0" max="1" step="0.05" value="0.35" /></div>
+              <button class="round-button bird" id="soundToggle" aria-label="播放鸟鸣">♬</button>
+              <audio id="birdAudio" loop src="../assets/audio/bird.mp3"></audio>
+            </div>
+            <button class="focus-cta" data-go="create"><span>F.</span><div><small>READY WHEN YOU ARE</small>进入专注模式</div><i>→</i></button>
+          </div>
+          <div class="swipe-tip">向左滑动，开始今天的计划 <span>⌁</span></div>
+        </section>
+
+        <section class="screen create" data-screen="create">
+          <header class="topbar"><button class="back" data-go="home">←</button><div><span class="eyebrow">FOCUS SESSION</span><h2>创建专注任务</h2></div><span class="step">01 <i>/</i> 01</span></header>
+          <div class="create-content">
+            <div class="task-art"><div class="art-ring"></div><img src="../assets/image/gekoFighting.png" alt="加油的小壁虎" /></div>
+            <form class="task-form" id="taskForm">
+              <label for="taskName">你想专注做什么？</label>
+              <input id="taskName" value="整理 Geko Keeper 的界面设计" autocomplete="off" />
+              <div class="tag-label"><span>选择一个标签</span><button type="button" id="newTag">+ 新标签</button></div>
+              <div class="tag-search">⌕ <input id="tagSearch" placeholder="搜索标签" /></div>
+              <div class="tags" id="tagList"><button type="button" class="tag selected">UI 设计</button><button type="button" class="tag purple">深度工作</button><button type="button" class="tag blue">学习</button><button type="button" class="tag peach">个人项目</button></div>
+              <button class="start-focus" type="submit">开始专注 <span>→</span></button>
+            </form>
+          </div>
+        </section>
+
+        <section class="screen focus" data-screen="focus">
+          <header class="focus-head"><button class="close-focus" data-go="create">×</button><div class="timer"><span>已专注</span><strong id="timer">00:24:18</strong></div><div class="task-now"><span class="tiny-tag">UI 设计</span><b id="focusTask">整理 Geko Keeper 的界面设计</b></div><button class="finish" id="finishFocus">结束任务 <span>■</span></button></header>
+          <div class="focus-hero"></div>
+          <div class="reminders">
+            <button class="reminder water" id="water"><span class="reminder-icon">♧</span><span><b>喝口水</b><small>上次记录 22 分钟前</small></span><i>＋</i></button>
+            <button class="reminder move" id="move"><span class="reminder-icon">♙</span><span><b>起来活动</b><small>颈部放松 / 走一走</small></span><i>＋</i></button>
+          </div>
+        </section>
+
+        <section class="screen checklist" data-screen="checklist">
+          <header class="topbar"><button class="back" data-go="create">←</button><div><span class="eyebrow">SUNDAY · AUG 02</span><h2>今日 Checklist</h2></div><div class="completion"><b id="checkCount">3</b><span>/ 6 完成</span></div></header>
+          <div class="check-body"><div class="check-summary"><div class="progress"><span id="progress"></span></div></div><div class="check-list" id="checkList">
+            <button class="check-item done"><i>✓</i><span>晨间拉伸 5 分钟</span><small>健康</small></button>
+            <button class="check-item done"><i>✓</i><span>补充水分</span><small>健康</small></button>
+            <button class="check-item"><i>✓</i><span>整理工作台</span><small>生活</small></button>
+            <button class="check-item done"><i>✓</i><span>阅读 20 分钟</span><small>学习</small></button>
+            <button class="check-item"><i>✓</i><span>记录今天的心情</span><small>习惯</small></button>
+            <button class="check-item"><i>✓</i><span>睡前关屏</span><small>休息</small></button>
+          </div></div>
+        </section>
+
+        <section class="screen report" data-screen="report">
+          <header class="topbar"><button class="back" data-go="checklist">←</button><div><span class="eyebrow">YOUR DAY AT A GLANCE</span><h2>时间报告</h2></div><button class="calendar">▣ 2026.08.02</button></header>
+          <div class="report-body"><section class="report-summary"><span>今日专注</span><strong>4h 26m</strong><div class="ring"><div><b>72%</b></div></div></section><section class="timeline"><div class="timeline-head"><div><b>时间轴</b></div><button>今天</button></div><div class="hours"><span>08</span><span>10</span><span>12</span><span>14</span><span>16</span><span>18</span></div><div class="bars"><div class="bar work" style="left:4%;width:27%"><span>深度工作 · 2h 05m</span></div><div class="bar study" style="left:35%;width:18%"><span>学习</span></div><div class="bar personal" style="left:58%;width:24%"><span>个人项目 · 1h 06m</span></div></div><div class="legend"><span><i class="c-work"></i>深度工作</span><span><i class="c-study"></i>学习</span><span><i class="c-personal"></i>个人项目</span></div></section></div>
+        </section>
+      </section>
+    </main>
+    <script src="./app.js"></script>
+  </body>
+</html>
