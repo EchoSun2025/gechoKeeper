@@ -1,29 +1,27 @@
-﻿# Geko Keeper mobile app
+﻿# Geko Keeper
 
-The production app lives in this folder. It is an Expo + React Native landscape app for Android and iOS.
+Geko Keeper is now **Web-first**. The production frontend lives in `web/` and preserves the approved Preview landscape design while using React, TypeScript, and IndexedDB for offline-first focus sessions and checklists.
 
-## Implemented MVP
+## Run locally
 
-- Offline SQLite database with migrations and seed data
-- Focus sessions with start, elapsed timer, finish, and persisted history
-- Solid TimeTag-style tags
-- Daily checklist persistence
-- Daily and weekly focus summaries
-- Account/settings surface reserved for future sign-in and sync
+```powershell
+cd web
+npm.cmd run dev
+```
 
-## Run on Android
+Open the localhost link printed by Vite. The app works on desktop and mobile browsers. Browser data is stored locally in IndexedDB.
 
-1. Install Expo Go on your phone, or connect an Android emulator.
-2. Run `npm start` in this directory.
-3. Scan the QR code, then choose the Android target.
+## Build for a server
 
-Use `npm run android` to open an attached Android device/emulator directly.
+```powershell
+cd web
+npm.cmd run build
+```
 
-## Architecture
+Upload the contents of `web/dist/` to a static web server. The future login and sync API can be added without replacing the client data model.
 
-- `src/domain`: stable domain types
-- `src/data`: SQLite schema and repository functions
-- `src/state`: application state and use cases
-- `App.tsx`: landscape UI composition
+## Projects
 
-The current app is offline-first. A future server sync should use the domain/repository boundary rather than directly changing UI components.
+- `web/` — current React web application
+- `preview/` — original design reference
+- `app/` — retained Expo prototype; no longer the primary delivery path
