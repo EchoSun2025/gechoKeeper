@@ -34,3 +34,5 @@ button, input { font: inherit; }
 
 /* Reserve a clear account-avatar column on checklist screens. */
 .checklist-progress{margin-right:96px;width:clamp(330px,42vw,580px)}
+/* TimeTag mini-mode reminder widgets: exact cup fill and neck-rest indicators. */
+.reminder-widget{display:contents}.focus-tool.reminder-button{touch-action:none;padding:5px;gap:0}.focus-tool.reminder-button svg{display:block;width:48px;height:58px;overflow:visible}.focus-tool.reminder-button small{margin-top:-3px;line-height:1;color:#fff;font-size:10px}.focus-tool.reminder-button.water{color:#fff}.focus-tool.reminder-button.move{color:#fff}.focus-tool.reminder-button.neck-warn{background:#8f7b20d9}.focus-tool.reminder-button.neck-danger{background:#bd554fd9;animation:neck-alert 1s ease-in-out infinite alternate}@keyframes neck-alert{to{transform:translateY(-2px);box-shadow:0 0 0 4px #ef444466,0 10px 26px #112d1c66}}
