@@ -36,3 +36,71 @@ button, input { font: inherit; }
 .checklist-progress{margin-right:96px;width:clamp(330px,42vw,580px)}
 /* TimeTag mini-mode reminder widgets: exact cup fill and neck-rest indicators. */
 .reminder-widget{display:contents}.focus-tool.reminder-button{touch-action:none;padding:5px;gap:0}.focus-tool.reminder-button svg{display:block;width:48px;height:58px;overflow:visible}.focus-tool.reminder-button small{margin-top:-3px;line-height:1;color:#fff;font-size:10px}.focus-tool.reminder-button.water{color:#fff}.focus-tool.reminder-button.move{color:#fff}.focus-tool.reminder-button.neck-warn{background:#8f7b20d9}.focus-tool.reminder-button.neck-danger{background:#bd554fd9;animation:neck-alert 1s ease-in-out infinite alternate}@keyframes neck-alert{to{transform:translateY(-2px);box-shadow:0 0 0 4px #ef444466,0 10px 26px #112d1c66}}
+
+/* Mobile PWA shell: the document never scrolls; only the app handles gestures. */
+@media (max-width: 760px), (orientation: landscape) and (max-height: 560px) {
+  html, body, #root {
+    width: 100%;
+    height: 100dvh;
+    min-width: 0;
+    margin: 0;
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+
+  body { position: fixed; inset: 0; background: #edf0e8; }
+
+  .device-shell {
+    position: fixed;
+    inset: 0;
+    width: auto;
+    height: 100dvh;
+    margin: 0;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    overflow: hidden;
+    background: #edf0e8;
+  }
+
+  .ratio-note { display: none; }
+
+  .app {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    aspect-ratio: auto;
+    overflow: hidden;
+    border-radius: 0;
+    box-shadow: none;
+    touch-action: pan-y;
+  }
+
+  .screen { overflow: hidden; }
+  #accountButton { width: 46px; height: 46px; font-size: 21px; top: 3.5%; right: 2.5%; }
+  .account-panel { width: min(300px, 82vw); right: 2.5%; top: 18%; }
+  .page-indicator { right: 18px; bottom: 12px; }
+
+  .checklist-topbar { height: 25%; padding: 4% 4%; gap: 9px; }
+  .checklist-progress { width: 42%; min-width: 0; margin-right: 44px; gap: 5px; }
+  .checklist-progress .progress-set > span { font-size: 8px; }
+  .checklist-progress .progress-set b { font-size: 9px; }
+  .check-body { height: 75%; padding: 0 4% 4%; overflow-y: auto; overscroll-behavior: contain; }
+  .check-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+  .check-item { min-width: 0; min-height: 58px; padding: 10px; font-size: 11px; }
+  .check-item small { display: none; }
+
+  .report-body { height: 75%; padding: 1% 5% 4%; overflow-y: auto; overscroll-behavior: contain; }
+  .focus-overlay.show { transform: none; }
+  .focus-overlay { top: 28%; right: 4%; width: min(80%, 340px); }
+}
+
+@media (orientation: landscape) and (max-height: 560px) {
+  .home-header { top: 5%; }
+  .focus-overlay { top: 22%; right: 1.5%; width: min(36%, 310px); }
+  .focus-tool, .finish { width: 64px; height: 58px; border-radius: 16px; font-size: 29px; }
+  .focus-tool.reminder-button svg { width: 37px; height: 42px; }
+  .focus-tools { gap: 8px; }
+  .checklist-topbar { height: 26%; padding: 3% 5%; }
+  .check-body { height: 74%; padding-bottom: 3%; }
+  .check-item { min-height: 48px; padding: 8px 10px; }
+  .report-body { padding-bottom: 3%; }
+}
