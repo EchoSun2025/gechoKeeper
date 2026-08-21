@@ -1,4 +1,4 @@
-const CACHE_NAME = 'geko-keeper-v1';
+const CACHE_NAME = 'geko-keeper-v2';
 const APP_SHELL = ['./', './index.html', './manifest.webmanifest'];
 
 self.addEventListener('install', event => {
@@ -15,6 +15,18 @@ self.addEventListener('activate', event => {
 
 self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET' || new URL(event.request.url).origin !== self.location.origin) return;
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request).then(response => {
+        if (response.ok) {
+          const copy = response.clone();
+          void caches.open(CACHE_NAME).then(cache => cache.put('./', copy));
+        }
+        return response;
+      }).catch(() => caches.match('./'))
+    );
+    return;
+  }
   event.respondWith(
     caches.match(event.request).then(cached => cached || fetch(event.request).then(response => {
       if (response.ok) {
