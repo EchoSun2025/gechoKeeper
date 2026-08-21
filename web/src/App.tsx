@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import type { FormEvent } from 'react';
+import type { FormEvent, TouchEvent } from 'react';
 import './index.css';
 import { NeckRestReminder, WaterReminder } from './components/ReminderWidgets';
 import { db, seedDatabase, todayKey, uid, type Checklist, type Session, type Tag } from './data';
 
 type Page = 'home' | 'checklist' | 'report';
+const pages: Page[] = ['home', 'checklist', 'report'];
 const formatTime = (seconds: number) => [Math.floor(seconds / 3600), Math.floor(seconds / 60) % 60, seconds % 60].map(value => String(value).padStart(2, '0')).join(':');
 const date = () => new Date().toLocaleTimeString('en-NZ', { hour: '2-digit', minute: '2-digit', hour12: false });
 
@@ -21,6 +22,7 @@ export default function App() {
   const [now, setNow] = useState(Date.now());
   const [sound, setSound] = useState(false);
   const audio = useRef<HTMLAudioElement>(null);
+  const touchStart = useRef<{ x: number; y: number } | null>(null);
   const active = sessions.find(session => !session.endedAt);
   const activeTag = tags.find(tag => tag.id === active?.tagId) ?? tags[0];
   const seconds = active ? Math.max(0, Math.floor((now - new Date(active.startedAt).getTime()) / 1000)) : 0;
@@ -33,14 +35,38 @@ export default function App() {
   };
   useEffect(() => { seedDatabase().then(refresh); }, []);
   useEffect(() => { const id = window.setInterval(() => setNow(Date.now()), 1000); return () => clearInterval(id); }, []);
-  useEffect(() => { if (!audio.current) return; sound ? audio.current.play() : audio.current.pause(); }, [sound]);
+  useEffect(() => {
+    if (!audio.current) return;
+    if (sound) void audio.current.play();
+    else audio.current.pause();
+  }, [sound]);
 
   const beginFocus = async (event: FormEvent) => { event.preventDefault(); await db.sessions.add({ id: uid(), title: title.trim() || 'Untitled focus task', tagId, startedAt: new Date().toISOString() }); await refresh(); setCreateOpen(false); };
   const finishFocus = async () => { if (!active) return; await db.sessions.update(active.id, { endedAt: new Date().toISOString() }); await refresh(); setPage('report'); };
   const toggle = async (task: Checklist) => { const value = !checked[task.id]; await db.completions.put({ id: `${todayKey()}-${task.id}`, checklistId: task.id, date: todayKey(), checked: value }); await refresh(); };
   const addTag = async () => { const name = window.prompt('Tag name'); if (!name?.trim()) return; const tag = { id: uid(), name: name.trim(), color: '#4285F4' }; await db.tags.add(tag); setTagId(tag.id); await refresh(); };
 
-  return <main className="device-shell"><div className="ratio-note">GEKO KEEPER · WEB FIRST · LOCAL DATA</div><section className={`app ${active ? 'focus-active' : ''}`}>
+  const beginSwipe = (event: TouchEvent<HTMLElement>) => {
+    if (createOpen || accountOpen || active) return;
+    const touch = event.touches[0];
+    touchStart.current = { x: touch.clientX, y: touch.clientY };
+  };
+  const finishSwipe = (event: TouchEvent<HTMLElement>) => {
+    const start = touchStart.current;
+    touchStart.current = null;
+    if (!start || createOpen || accountOpen || active) return;
+    const touch = event.changedTouches[0];
+    const dx = touch.clientX - start.x;
+    const dy = touch.clientY - start.y;
+    if (Math.abs(dx) < 56 || Math.abs(dx) <= Math.abs(dy)) return;
+    setPage(current => {
+      const index = pages.indexOf(current);
+      const next = dx < 0 ? index + 1 : index - 1;
+      return pages[Math.max(0, Math.min(pages.length - 1, next))];
+    });
+  };
+
+  return <main className="device-shell"><div className="ratio-note">GEKO KEEPER · WEB FIRST · LOCAL DATA</div><section className={`app ${active ? 'focus-active' : ''}`} onTouchStart={beginSwipe} onTouchEnd={finishSwipe}>
     <nav className="page-indicator">{(['home', 'checklist', 'report'] as Page[]).map(item => <button key={item} className={`dot ${page === item ? 'active' : ''}`} onClick={() => setPage(item)} aria-label={item} />)}</nav>
     <button className="avatar" id="accountButton" onClick={() => setAccountOpen(!accountOpen)}>E</button>
     {accountOpen && <aside className="account-panel open"><div className="account-summary"><div className="account-mark">E</div><div><b>Echo</b><span>Local workspace</span></div></div><button className="account-item"><span>◌</span> Account settings <i>›</i></button><button className="account-item"><span>◌</span> Reminder settings <i>›</i></button><label className="setting-row">Focus reminders <input type="checkbox" defaultChecked /><span /></label><label className="setting-row">Bird sounds <input type="checkbox" checked={sound} onChange={() => setSound(!sound)} /><span /></label><div className="account-note">Your data is stored on this device. Server sign-in and sync will connect here later.</div></aside>}
